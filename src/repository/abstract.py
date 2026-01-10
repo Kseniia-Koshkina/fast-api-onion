@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.db.session import session_local
+from src.db.session import get_session
 
 class AbstractRepository(ABC):
 	# @abstractmethod
@@ -23,9 +23,9 @@ class SQLAlchemyRepository(AbstractRepository):
 	# 	return item
 
 	def get(self, item_id):
-		session = session_local()
+		session = get_session()
 		return session.query(self.model).get(item_id)
 
 	def list(self):
-		session = session_local()
+		session = get_session()
 		return session.query(self.model).all()
