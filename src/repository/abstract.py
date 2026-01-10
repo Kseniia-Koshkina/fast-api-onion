@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from src.db.session import get_session
+from sqlalchemy.orm import Session
 
 class AbstractRepository(ABC):
-	# @abstractmethod
-	# def add(self, item):
-	# 	pass
+	@abstractmethod
+	def create(self, item):
+		pass
 
 	@abstractmethod
 	def get(self, item_id):
@@ -14,18 +14,29 @@ class AbstractRepository(ABC):
 	def list(self):
 		pass
 
+	@abstractmethod
+	def delete(self, item_id):
+		pass
+
 class SQLAlchemyRepository(AbstractRepository):
 	model = None
 
-	# def add(self, item):
-	# 	self.session.add(item)
-	# 	self.session.commit()
-	# 	return item
 	def __init__(self, session):
-		self.session = session
+		self.session: Session = session
 
 	def get(self, item_id):
 		return self.session.query(self.model).get(item_id)
 
 	def list(self):
 		return self.session.query(self.model).all()
+
+	def create(self, item_data):
+		new_item = self.model(**item_data.dict())
+		self.session.add(new_item)
+		return new_item
+
+	def delete(self, item_id):
+		item = self.get(item_id)
+		if item:
+			self.session.delete(item)
+		return item
