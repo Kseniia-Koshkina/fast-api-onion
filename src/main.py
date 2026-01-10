@@ -1,16 +1,6 @@
 from fastapi import FastAPI
-import uvicorn
-from Models.tasks import Tasks
-from db.connection import database_session
+from src.router.tasks_router import router as tasks_router
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-  db = database_session()
-  tasks = db.query(Tasks).all()
-  return {"tasks": tasks}
-
-
-if __name__ == "__main__":
-  uvicorn.run(app="main:app", reload=True)
+app.include_router(tasks_router)

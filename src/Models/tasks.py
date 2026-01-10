@@ -1,9 +1,8 @@
-from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy import String
 
-from db.base_model import Base
+from src.db.base import Base
 
 class Tasks(Base):
 	__tablename__ = "tasks"
