@@ -21,11 +21,11 @@ class SQLAlchemyRepository(AbstractRepository):
 	# 	self.session.add(item)
 	# 	self.session.commit()
 	# 	return item
+	def __init__(self, session):
+		self.session = session
 
 	def get(self, item_id):
-		session = get_session()
-		return session.query(self.model).get(item_id)
+		return self.session.query(self.model).get(item_id)
 
 	def list(self):
-		session = get_session()
-		return session.query(self.model).all()
+		return self.session.query(self.model).all()
