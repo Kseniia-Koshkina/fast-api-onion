@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 class AbstractRepository(ABC):
@@ -16,6 +17,11 @@ class AbstractRepository(ABC):
 
 	@abstractmethod
 	def delete(self, item_id):
+		pass
+
+class AbstractUserRepository(AbstractRepository):
+	@abstractmethod
+	def get_by_username(self, username):
 		pass
 
 class SQLAlchemyRepository(AbstractRepository):
@@ -40,3 +46,8 @@ class SQLAlchemyRepository(AbstractRepository):
 		if item:
 			self.session.delete(item)
 		return item
+
+class SQLAlchemyUserRepository(SQLAlchemyRepository, AbstractUserRepository):
+	def get_by_username(self, username):
+		stmt = select(self.model).where(self.model.username == username)
+		return self.session.execute(stmt).scalar_one_or_none()
