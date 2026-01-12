@@ -1,4 +1,4 @@
-from src.repository.abstract import AbstractRepository
+from src.domain.repositories.abstract_repository import AbstractRepository
 
 class TaskService():
 	def __init__(self, repository):

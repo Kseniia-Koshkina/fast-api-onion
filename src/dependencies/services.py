@@ -1,5 +1,5 @@
-from src.services.users import UserService
-from src.services.tasks import TaskService
+from src.application.services.users_service import UserService
+from src.application.services.tasks_service import TaskService
 from src.dependencies.repositories import get_tasks_repo, get_users_repo
 from fastapi import Depends
 

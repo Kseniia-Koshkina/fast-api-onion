@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends
 
-from src.services.users import UserService
+from ..mappers.users import user_register_to_dto
+from src.application.services.users_service import UserService
 from src.dependencies.services import get_users_service
-from src.schema.auth import LoginSchema
+from ..schema.auth import LoginSchema, UserRegisterSchema
+from src.utils.auth import create_token
 
 router = APIRouter(
 	prefix="/auth",
@@ -22,15 +24,14 @@ def login(
     if not credentials_valid:
         return {"message": "Invalid username or password"}
 
-    return {"jwt_token": "fake-jwt-token"}
+    return create_token({"username": user_data.username})
 
 
 @router.post("/register")
 def register(
-	login_data: LoginSchema,
+	login_data: UserRegisterSchema,
 	user_service: UserService = Depends(get_users_service)
 ):
-	user = user_service.create_user(login_data)
-	return user
-
-
+    dto = user_register_to_dto(login_data)
+    user = user_service.create_user(dto)
+    return create_token({"username": user.username})

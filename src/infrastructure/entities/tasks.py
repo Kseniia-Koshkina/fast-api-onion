@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String
 
-from src.db.base import Base
+from ..db.base import Base
 
-class Tasks(Base):
+class TasksEntity(Base):
 	__tablename__ = "tasks"
 
 	id: Mapped[int] = mapped_column(primary_key=True)
